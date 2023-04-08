@@ -1,12 +1,14 @@
 import './App.css';
 import Container from 'react-bootstrap/Container';
-import ShipmentList from './components/ShipmentsList';
+import ShipmentTable from './components/ShipmentsTable';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header h1">Shipments CRUD page</header>
-      <ShipmentList />
+      <header className="text-center text-secondary text-uppercase h3 m-2">
+        Shipments CRUD page
+      </header>
+      <ShipmentTable />
     </div>
   );
 }
