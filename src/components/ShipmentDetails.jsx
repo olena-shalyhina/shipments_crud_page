@@ -3,42 +3,59 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
-const ShipmentDatails = (props) => {
-  const handleClose = () => props.setShow(false);
-  const formData = Object.entries(props.shipment);
-  console.log(formData);
-  console.log(formData.indexOf(formData[0]));
-  console.log(formData[0]);
-  console.log(formData[0]);
+const ShipmentDatails = ({
+  show,
+  setShow,
+  shipment,
+  setShipment,
+  saveChanges,
+}) => {
+  // const { show, setShow, shipment, setShipment, saveChanges } = props;
+  const handleClose = () => setShow(false);
+  const formData = Object.entries(shipment);
+
+  const handleChangeInputValue = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    setShipment({
+      ...shipment,
+      [name]: value,
+    });
+  };
+
   return (
     <>
-      <Modal
-        show={props.show}
-        onHide={handleClose}
-        size={'md'}
-        className="fs-6 lh-1"
-      >
+      <Modal show={show} onHide={handleClose} size={'md'} className="fs-6 lh-1">
         <Modal.Header closeButton>
           <Modal.Title>Shipment datails</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {formData.map((elem) => (
-            <Form key={formData.indexOf(elem) + 1}>
+          <Form>
+            {formData.map((elem) => (
               <Form.Group
-                className="mb-3"
+                className=""
                 controlId={formData.indexOf(elem) + 1}
+                key={formData.indexOf(elem) + 1}
               >
                 <Form.Label>{elem[0].toUpperCase()}</Form.Label>
-                <Form.Control type="input" defaultValue={elem[1]} autoFocus />
+                <Form.Control
+                  disabled={elem[0] === 'orderNo'}
+                  onChange={handleChangeInputValue}
+                  type="input"
+                  name={elem[0]}
+                  defaultValue={elem[1]}
+                  autoFocus
+                />
               </Form.Group>
-            </Form>
-          ))}
+            ))}
+          </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={saveChanges}>
             Save Changes
           </Button>
         </Modal.Footer>

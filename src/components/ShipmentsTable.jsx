@@ -13,14 +13,15 @@ const ShipmentTable = () => {
 
   const [show, setShow] = useState(false);
 
-  const handleShow = (e) => {
-    console.log(e);
-    setShipment(
-      shipments.find((shipment) => shipment.orderNo === e.target.name)
-    );
+  const handleShow = (orderNo) => {
+    setShipment(shipments.find((shipment) => shipment.orderNo === orderNo));
     setShow(true);
   };
-  console.log(shipment);
+
+  const handleDelete = (orderNo) => {
+    setShipments(shipments.filter((shipment) => shipment.orderNo != orderNo));
+  };
+
   useEffect(() => {
     fetchShipments();
   }, []);
@@ -38,8 +39,16 @@ const ShipmentTable = () => {
       setShipments(data);
       console.log(shipments);
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
+  };
+
+  const saveChanges = () => {
+    setShipments(
+      shipments.map((elem) =>
+        elem.orderNo === shipment.orderNo ? shipment : elem
+      )
+    );
   };
 
   return (
@@ -47,7 +56,7 @@ const ShipmentTable = () => {
       <Table className="" striped size="lg">
         <thead className="table-secondary text-secondary text-uppercase  border border-start-0 border-end-0 border-top-0 border-1 border-primary lh-5">
           <tr>
-            <th></th>
+            <th>N</th>
             <th>Orderno</th>
             <th>Deliverydata</th>
             <th>Customer</th>
@@ -58,42 +67,51 @@ const ShipmentTable = () => {
           </tr>
         </thead>
         <tbody>
-          {shipments
-            ? shipments.map((shipment) => (
-                <tr key={shipment.orderNo}>
-                  <td>{shipments.indexOf(shipment) + 1}</td>
-                  <td>{shipment.orderNo}</td>
-                  <td>{shipment.date}</td>
-                  <td>{shipment.customer}</td>
-                  <td>{shipment.trackingNo}</td>
-                  <td>{shipment.status}</td>
-                  <td>{shipment.consignee}</td>
-                  <td>
-                    <div className="d-flex align-self-center">
-                      <Button
-                        variant="outline-primary m-1"
-                        size="sm"
-                        onClick={handleShow}
-                        name={shipment.orderNo}
-                      >
-                        &#8690;
-                      </Button>
-                      <Button
-                        // className="border
-                        // border-2"
-                        variant="outline-danger m-1"
-                        size="sm"
-                      >
-                        &#10005;
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            : ''}
+          <>
+            {shipments
+              ? shipments.map((shipment) => (
+                  <tr key={shipment.orderNo}>
+                    <td>{shipments.indexOf(shipment) + 1}</td>
+                    <td>{shipment.orderNo}</td>
+                    <td>{shipment.date}</td>
+                    <td>{shipment.customer}</td>
+                    <td>{shipment.trackingNo}</td>
+                    <td>{shipment.status}</td>
+                    <td>{shipment.consignee}</td>
+                    <td>
+                      <div className="d-flex align-self-center">
+                        <Button
+                          variant="outline-primary m-1"
+                          size="sm"
+                          // onClick={handleShow}
+                          onClick={() => handleShow(shipment.orderNo)}
+                          // value={shipment.orderNo}
+                        >
+                          &#8690;
+                        </Button>
+                        <Button
+                          variant="outline-danger m-1"
+                          size="sm"
+                          onClick={() => handleDelete(shipment.orderNo)}
+                          // value={shipment.orderNo}
+                        >
+                          &#10005;
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              : ''}
+          </>
         </tbody>
       </Table>
-      <ShipmentDatails show={show} setShow={setShow} shipment={shipment} />
+      <ShipmentDatails
+        show={show}
+        setShow={setShow}
+        shipment={shipment}
+        setShipment={setShipment}
+        saveChanges={saveChanges}
+      />
     </div>
   );
 };
