@@ -3,7 +3,6 @@ import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { getShipments } from '../API/apiServise';
-import { getShipmentsData } from '../API/dataService';
 import '../styles/shipmentsList.css';
 import ShipmentDatails from './ShipmentDetails';
 
@@ -52,9 +51,9 @@ const ShipmentTable = () => {
   };
 
   return (
-    <div className="m-1 border border-1 border-primary">
-      <Table className="" striped size="lg">
-        <thead className="table-secondary text-secondary text-uppercase  border border-start-0 border-end-0 border-top-0 border-1 border-primary lh-5">
+    <>
+      <Table className="" striped size="sm">
+        <thead className="table-secondary text-secondary text-uppercase  border border-1 border-primary lh-5">
           <tr>
             <th>N</th>
             <th>Orderno</th>
@@ -66,7 +65,7 @@ const ShipmentTable = () => {
             <th></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className="border border-1 border-primary align-middle">
           <>
             {shipments
               ? shipments.map((shipment) => (
@@ -83,9 +82,7 @@ const ShipmentTable = () => {
                         <Button
                           variant="outline-primary m-1"
                           size="sm"
-                          // onClick={handleShow}
                           onClick={() => handleShow(shipment.orderNo)}
-                          // value={shipment.orderNo}
                         >
                           &#8690;
                         </Button>
@@ -112,7 +109,7 @@ const ShipmentTable = () => {
         setShipment={setShipment}
         saveChanges={saveChanges}
       />
-    </div>
+    </>
   );
 };
 

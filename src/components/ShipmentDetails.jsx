@@ -26,9 +26,11 @@ const ShipmentDatails = ({
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} size={'md'} className="fs-6 lh-1">
+      <Modal show={show} onHide={handleClose} size={'md'} mt-0>
         <Modal.Header closeButton>
-          <Modal.Title>Shipment datails</Modal.Title>
+          <Modal.Title className="text-secondary text-uppercase fs-6">
+            Shipment datails
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -38,7 +40,9 @@ const ShipmentDatails = ({
                 controlId={formData.indexOf(elem) + 1}
                 key={formData.indexOf(elem) + 1}
               >
-                <Form.Label>{elem[0].toUpperCase()}</Form.Label>
+                <Form.Label className="text-secondary">
+                  {elem[0].toUpperCase()}
+                </Form.Label>
                 <Form.Control
                   disabled={elem[0] === 'orderNo'}
                   onChange={handleChangeInputValue}
