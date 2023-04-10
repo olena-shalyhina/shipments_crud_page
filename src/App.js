@@ -5,12 +5,10 @@ import ShipmentTable from './components/ShipmentsTable';
 function App() {
   return (
     <div className="App">
-      <Container fluid>
-        <header className="text-center text-secondary text-uppercase h3 m-2">
-          Shipments CRUD page
-        </header>
-        <ShipmentTable />
-      </Container>
+      <header className="text-center text-success text-uppercase bg-light h5 m-2">
+        Shipments CRUD page
+      </header>
+      <ShipmentTable />
     </div>
   );
 }

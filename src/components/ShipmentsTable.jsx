@@ -1,25 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import { getShipments } from '../API/apiServise';
-import '../styles/shipmentsList.css';
-import ShipmentDatails from './ShipmentDetails';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchShipments, setShipments } from '../store/shipmentsSlice';
+import { setActiveShipment } from '../store/activeShipmentSlice';
+import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
+import { Spinner } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import '../styles/shipmentsList.css';
+import ShipmentDatails from './ShipmentDetails';
 
 const ShipmentTable = () => {
-  // const [shipments, setShipments] = useState('');
-  // const [shipments, setShipments] = useState('');
-  const [shipment, setShipment] = useState('');
   const [show, setShow] = useState(false);
+
   const dispatch = useDispatch();
   const shipments = useSelector((state) => state.shipments.shipments);
   const isLoading = useSelector((state) => state.shipments.isLoading);
   const error = useSelector((state) => state.shipments.error);
+  const activeShipment = useSelector(
+    (state) => state.activeShipment.activeShipment
+  );
+
+  useEffect(() => {
+    dispatch(fetchShipments());
+  }, [dispatch]);
 
   const handleShow = (orderNo) => {
-    setShipment(shipments.find((shipment) => shipment.orderNo === orderNo));
+    dispatch(
+      setActiveShipment(
+        shipments.find((shipment) => shipment.orderNo === orderNo)
+      )
+    );
     setShow(true);
   };
 
@@ -29,52 +39,30 @@ const ShipmentTable = () => {
     );
   };
 
-  useEffect(() => {
-    dispatch(fetchShipments());
-  }, [dispatch]);
+  const saveChanges = () => {
+    dispatch(
+      setShipments(
+        shipments.map((shipment) =>
+          shipment.orderNo === activeShipment.orderNo
+            ? activeShipment
+            : shipment
+        )
+      )
+    );
+  };
 
   if (isLoading) {
-    return 'loading...';
+    return <Spinner animation="border" variant="primary" size="lg" />;
   }
 
   if (error) {
     return error;
   }
 
-  // useEffect(() => {
-  //   fetchShipments();
-  // }, []);
-  // const fetchShipments = async () => {
-  //   // const data = await getShipments();
-  //   const data = await getShipmentsData();
-  //   setShipments(data);
-  //   console.log(shipments);
-  // };
-
-  // const fetchShipments = async () => {
-  //   try {
-  //     const data = await getShipments();
-  //     setShipments(data);
-  //     console.log(shipments);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  const saveChanges = () => {
-    dispatch(
-      setShipments(
-        shipments.map((elem) =>
-          elem.orderNo === shipment.orderNo ? shipment : elem
-        )
-      )
-    );
-  };
-
   return (
     <>
-      <Table className="" striped size="sm">
-        <thead className="table-secondary text-secondary text-uppercase  border border-1 border-primary lh-5">
+      <Table striped hover size="sm">
+        <thead className="table-success text-success text-uppercase  border border-1 border-success  lh-5">
           <tr>
             <th>N</th>
             <th>Orderno</th>
@@ -86,7 +74,7 @@ const ShipmentTable = () => {
             <th></th>
           </tr>
         </thead>
-        <tbody className="border border-1 border-primary align-middle">
+        <tbody className="border border-1 border-success align-middle">
           <>
             {shipments.map((shipment) => (
               <tr key={shipment.orderNo}>
@@ -100,7 +88,7 @@ const ShipmentTable = () => {
                 <td>
                   <div className="d-flex align-self-center">
                     <Button
-                      variant="outline-primary m-1"
+                      variant="outline-success m-1"
                       size="sm"
                       onClick={() => handleShow(shipment.orderNo)}
                     >
@@ -123,8 +111,6 @@ const ShipmentTable = () => {
       <ShipmentDatails
         show={show}
         setShow={setShow}
-        shipment={shipment}
-        setShipment={setShipment}
         saveChanges={saveChanges}
       />
     </>

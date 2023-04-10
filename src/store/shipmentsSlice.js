@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+// import axios from 'axios';
 
 const initialState = {
   shipments: [],
@@ -53,5 +53,6 @@ export const shipmentsSlice = createSlice({
     });
   },
 });
+
 export const { setShipments } = shipmentsSlice.actions;
 export default shipmentsSlice.reducer;
