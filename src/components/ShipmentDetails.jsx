@@ -26,7 +26,7 @@ const ShipmentDatails = ({
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} size={'md'} mt-0>
+      <Modal show={show} onHide={handleClose} size={'md'}>
         <Modal.Header closeButton>
           <Modal.Title className="text-secondary text-uppercase fs-6">
             Shipment datails

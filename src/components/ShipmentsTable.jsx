@@ -2,15 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { getShipments } from '../API/apiServise';
+// import { getShipments } from '../API/apiServise';
 import '../styles/shipmentsList.css';
 import ShipmentDatails from './ShipmentDetails';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchShipments, setShipments } from '../store/shipmentsSlice';
 
 const ShipmentTable = () => {
-  const [shipments, setShipments] = useState('');
+  // const [shipments, setShipments] = useState('');
+  // const [shipments, setShipments] = useState('');
   const [shipment, setShipment] = useState('');
-
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
+  const shipments = useSelector((state) => state.shipments.shipments);
+  const isLoading = useSelector((state) => state.shipments.isLoading);
+  const error = useSelector((state) => state.shipments.error);
 
   const handleShow = (orderNo) => {
     setShipment(shipments.find((shipment) => shipment.orderNo === orderNo));
@@ -18,13 +24,26 @@ const ShipmentTable = () => {
   };
 
   const handleDelete = (orderNo) => {
-    setShipments(shipments.filter((shipment) => shipment.orderNo != orderNo));
+    dispatch(
+      setShipments(shipments.filter((shipment) => shipment.orderNo !== orderNo))
+    );
   };
 
   useEffect(() => {
-    fetchShipments();
-  }, []);
+    dispatch(fetchShipments());
+  }, [dispatch]);
 
+  if (isLoading) {
+    return 'loading...';
+  }
+
+  if (error) {
+    return error;
+  }
+
+  // useEffect(() => {
+  //   fetchShipments();
+  // }, []);
   // const fetchShipments = async () => {
   //   // const data = await getShipments();
   //   const data = await getShipmentsData();
@@ -32,20 +51,22 @@ const ShipmentTable = () => {
   //   console.log(shipments);
   // };
 
-  const fetchShipments = async () => {
-    try {
-      const data = await getShipments();
-      setShipments(data);
-      console.log(shipments);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const fetchShipments = async () => {
+  //   try {
+  //     const data = await getShipments();
+  //     setShipments(data);
+  //     console.log(shipments);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
   const saveChanges = () => {
-    setShipments(
-      shipments.map((elem) =>
-        elem.orderNo === shipment.orderNo ? shipment : elem
+    dispatch(
+      setShipments(
+        shipments.map((elem) =>
+          elem.orderNo === shipment.orderNo ? shipment : elem
+        )
       )
     );
   };
@@ -67,38 +88,35 @@ const ShipmentTable = () => {
         </thead>
         <tbody className="border border-1 border-primary align-middle">
           <>
-            {shipments
-              ? shipments.map((shipment) => (
-                  <tr key={shipment.orderNo}>
-                    <td>{shipments.indexOf(shipment) + 1}</td>
-                    <td>{shipment.orderNo}</td>
-                    <td>{shipment.date}</td>
-                    <td>{shipment.customer}</td>
-                    <td>{shipment.trackingNo}</td>
-                    <td>{shipment.status}</td>
-                    <td>{shipment.consignee}</td>
-                    <td>
-                      <div className="d-flex align-self-center">
-                        <Button
-                          variant="outline-primary m-1"
-                          size="sm"
-                          onClick={() => handleShow(shipment.orderNo)}
-                        >
-                          &#8690;
-                        </Button>
-                        <Button
-                          variant="outline-danger m-1"
-                          size="sm"
-                          onClick={() => handleDelete(shipment.orderNo)}
-                          // value={shipment.orderNo}
-                        >
-                          &#10005;
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              : ''}
+            {shipments.map((shipment) => (
+              <tr key={shipment.orderNo}>
+                <td>{shipments.indexOf(shipment) + 1}</td>
+                <td>{shipment.orderNo}</td>
+                <td>{shipment.date}</td>
+                <td>{shipment.customer}</td>
+                <td>{shipment.trackingNo}</td>
+                <td>{shipment.status}</td>
+                <td>{shipment.consignee}</td>
+                <td>
+                  <div className="d-flex align-self-center">
+                    <Button
+                      variant="outline-primary m-1"
+                      size="sm"
+                      onClick={() => handleShow(shipment.orderNo)}
+                    >
+                      &#8690;
+                    </Button>
+                    <Button
+                      variant="outline-danger m-1"
+                      size="sm"
+                      onClick={() => handleDelete(shipment.orderNo)}
+                    >
+                      &#10005;
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            ))}
           </>
         </tbody>
       </Table>
