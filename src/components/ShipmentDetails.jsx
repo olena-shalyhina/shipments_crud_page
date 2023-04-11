@@ -1,11 +1,11 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveShipment } from '../store/activeShipmentSlice';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
-const ShipmentDatails = ({ show, setShow, saveChanges }) => {
+const ShipmentDatails = ({ show, handleClose, saveChanges }) => {
   const dispatch = useDispatch();
 
   const activeShipment = useSelector(
@@ -13,8 +13,6 @@ const ShipmentDatails = ({ show, setShow, saveChanges }) => {
   );
 
   const initialFormValue = Object.entries(activeShipment);
-
-  const handleClose = () => setShow(false);
 
   const handleChangeInputValue = (event) => {
     const name = event.target.name;
@@ -30,8 +28,8 @@ const ShipmentDatails = ({ show, setShow, saveChanges }) => {
   return (
     <>
       <Modal show={show} onHide={handleClose} size={'lg'}>
-        <Modal.Header closeButton>
-          <Modal.Title className="text-success text-uppercase fs-6">
+        <Modal.Header closeButton className="bg-light">
+          <Modal.Title className="text-primary text-uppercase fs-6 bg-light">
             Shipment datails
           </Modal.Title>
         </Modal.Header>
@@ -51,18 +49,17 @@ const ShipmentDatails = ({ show, setShow, saveChanges }) => {
                   type="input"
                   name={elem[0]}
                   defaultValue={elem[1]}
-                  autoFocus
                 />
               </Form.Group>
             ))}
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-success m-2" size="sm" onClick={saveChanges}>
-            Save Changes
+          <Button variant="outline-primary m-2" size="sm" onClick={saveChanges}>
+            {'Save Changes'.toUpperCase()}
           </Button>
           <Button variant="outline-danger m-2" size="sm" onClick={handleClose}>
-            Close
+            {'Close'.toUpperCase()}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchShipments, setShipments } from '../store/shipmentsSlice';
 import { setActiveShipment } from '../store/activeShipmentSlice';
+import ShipmentDatails from './ShipmentDetails';
+import Loader from './Loader';
+import ErrorMessage from './ErrorMessage';
 import Table from 'react-bootstrap/Table';
 import Button from 'react-bootstrap/Button';
-import { Spinner } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import '../styles/shipmentsList.css';
-import ShipmentDatails from './ShipmentDetails';
 
 const ShipmentTable = () => {
   const [show, setShow] = useState(false);
 
   const dispatch = useDispatch();
+
   const shipments = useSelector((state) => state.shipments.shipments);
   const isLoading = useSelector((state) => state.shipments.isLoading);
   const error = useSelector((state) => state.shipments.error);
@@ -49,22 +50,24 @@ const ShipmentTable = () => {
         )
       )
     );
+    handleClose();
   };
 
-  if (isLoading) {
-    return <Spinner animation="border" variant="primary" size="lg" />;
-  }
+  const handleClose = () => setShow(false);
 
+  if (isLoading) {
+    return <Loader />;
+  }
   if (error) {
-    return error;
+    return <ErrorMessage error={error} />;
   }
 
   return (
     <>
-      <Table striped hover size="sm">
-        <thead className="table-success text-success text-uppercase  border border-1 border-success  lh-5">
+      <Table striped hover size="xs">
+        <thead className="table-secondary text-primary text-uppercase  border border-1 border-primary  m-5">
           <tr>
-            <th>N</th>
+            <th className="text-center">N</th>
             <th>Orderno</th>
             <th>Deliverydata</th>
             <th>Customer</th>
@@ -74,12 +77,14 @@ const ShipmentTable = () => {
             <th></th>
           </tr>
         </thead>
-        <tbody className="border border-1 border-success align-middle">
+        <tbody className="border border-1 border-primary align-middle">
           <>
             {shipments.map((shipment) => (
               <tr key={shipment.orderNo}>
-                <td>{shipments.indexOf(shipment) + 1}</td>
-                <td>{shipment.orderNo}</td>
+                <td className="text-primary text-center fw-bold">
+                  {shipments.indexOf(shipment) + 1}
+                </td>
+                <td className="fw-normal">{shipment.orderNo}</td>
                 <td>{shipment.date}</td>
                 <td>{shipment.customer}</td>
                 <td>{shipment.trackingNo}</td>
@@ -88,7 +93,7 @@ const ShipmentTable = () => {
                 <td>
                   <div className="d-flex align-self-center">
                     <Button
-                      variant="outline-success m-1"
+                      variant="outline-primary m-1"
                       size="sm"
                       onClick={() => handleShow(shipment.orderNo)}
                     >
@@ -112,6 +117,7 @@ const ShipmentTable = () => {
         show={show}
         setShow={setShow}
         saveChanges={saveChanges}
+        handleClose={handleClose}
       />
     </>
   );

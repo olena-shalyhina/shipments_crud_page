@@ -1,11 +1,10 @@
 import './App.css';
-import Container from 'react-bootstrap/Container';
 import ShipmentTable from './components/ShipmentsTable';
 
 function App() {
   return (
     <div className="App">
-      <header className="text-center text-success text-uppercase bg-light h5 m-2">
+      <header className="text-center text-secondary text-uppercase fw-bold bg-light h5 m-2">
         Shipments CRUD page
       </header>
       <ShipmentTable />

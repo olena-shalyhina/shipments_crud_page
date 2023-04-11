@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-// import axios from 'axios';
+import axios from 'axios';
 
 const initialState = {
   shipments: [],
@@ -7,28 +7,26 @@ const initialState = {
   error: null,
 };
 
-export const fetchShipments = createAsyncThunk(
-  'shipments/fetchShipments',
-  async () => {
-    const data = await fetch('shipments.json').then((respons) =>
-      respons.json()
-    );
-
-    console.log(data);
-    return data;
-  }
-);
 // export const fetchShipments = createAsyncThunk(
 //   'shipments/fetchShipments',
 //   async () => {
-//     const res = await axios(
-//       'https://my.api.mockaroo.com/shipments.json?key=5e0b62d0'
-//       // 'https://shipments.json'
+//     const data = await fetch('shipments.json').then((respons) =>
+//       respons.json()
 //     );
-//     const data = await res.data;
 //     return data;
 //   }
 // );
+
+export const fetchShipments = createAsyncThunk(
+  'shipments/fetchShipments',
+  async () => {
+    const res = await axios(
+      'https://my.api.mockaroo.com/shipments.json?key=5e0b62d0'
+    );
+    const data = await res.data;
+    return data;
+  }
+);
 
 export const shipmentsSlice = createSlice({
   name: 'shіpments',
