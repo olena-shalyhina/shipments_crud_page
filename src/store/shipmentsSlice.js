@@ -7,16 +7,6 @@ const initialState = {
   error: null,
 };
 
-// export const fetchShipments = createAsyncThunk(
-//   'shipments/fetchShipments',
-//   async () => {
-//     const data = await fetch('shipments.json').then((respons) =>
-//       respons.json()
-//     );
-//     return data;
-//   }
-// );
-
 export const fetchShipments = createAsyncThunk(
   'shipments/fetchShipments',
   async () => {
